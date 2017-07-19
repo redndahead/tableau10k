@@ -183,7 +183,7 @@
 
     // Add the token tot he header request.
     function setHeader(xhr) {
-      xhr.setRequestHeader('Auth', tableau.password);
+      xhr.setRequestHeader('Auth', tableau.connectionData);
     }
 
     // Extract custom values from the object.
@@ -273,8 +273,10 @@
     // Create event listeners for when the user submits the form
     $(document).ready(function() {
         $("#submitButton").click(function() {
-            tableau.connectionName = "10K Projects"; // This will be the data source name in Tableau
-            tableau.submit(); // This sends the connector object to Tableau
+          var token = $('#token').val().trim(),
+          tableau.connectionData = token;
+          tableau.connectionName = "10K Projects"; // This will be the data source name in Tableau
+          tableau.submit(); // This sends the connector object to Tableau
         });
     });
 })();
