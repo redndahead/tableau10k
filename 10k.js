@@ -4,12 +4,18 @@
 
     // Define the schema
     myConnector.getSchema = function(schemaCallback) {
-      schemaCallback([projectTableSchema]);
+      schemaCallback([projectTableSchema, userTableSchema]);
     };
 
     // Download the data
     myConnector.getData = function(table, doneCallback) {
-      projectGetData(table, doneCallback);
+      if (table.tableInfo.id == "projects") {
+        projectGetData(table, doneCallback);
+      }
+
+      if (table.tableInfo.id == "users") {
+        userGetData(table, doneCallback);
+      }
     };
 
     tableau.registerConnector(myConnector);
