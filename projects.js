@@ -256,22 +256,35 @@ function projectExtractCustomVals(customValues) {
   return customVals;
 }
 
+// Get the project IDs.
 function getProjectIDs() {
   var projectIDs = [];
-  $.ajax({
-    url: 'https://api.10000ft.com/api/v1/projects?per_page=200',
-    type: 'GET',
-    dataType: 'json',
-    async: false,
-    success: function(resp) {
-      var data = resp.data;
-      for (var i = 0, len = data.length; i < len; i++) {
-        var projectID = data[i].id;
-        projectIDs.push(projectID);
-      }
-    },
-    beforeSend: setHeader
-  });
+  var nextURL = '/api/v1/projects?per_page=100';
+  var paging = {};
+  while (nextURL) {
+    $.ajax({
+      url: 'https://api.10000ft.com' + nextURL,
+      type: 'GET',
+      dataType: 'json',
+      async: false,
+      success: function(resp) {
+        paging = resp.paging;
+        var data = resp.data;
+        for (var i = 0, len = data.length; i < len; i++) {
+          var projectID = data[i].id;
+          projectIDs.push(projectID);
+        }
+      },
+      beforeSend: setHeader
+    });
+
+    if ("next" in paging) {
+      nextURL = paging.next;
+    }
+    else {
+      nextURL = false;
+    }
+  }
 
   return projectIDs;
 }

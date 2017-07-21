@@ -13,7 +13,7 @@ var userCols = [
   }, {
     id: "archived",
     alias: "Archived",
-    dataType: tableau.dataTypeEnum.boolean
+    dataType: tableau.dataTypeEnum.bool
   }, {
     id: "display_name",
     alias: "Display Name",
@@ -29,7 +29,7 @@ var userCols = [
   }, {
     id: "billable",
     alias: "Billable",
-    dataType: tableau.dataTypeEnum.boolean
+    dataType: tableau.dataTypeEnum.bool
   }, {
     id: "hire_date",
     alias: "Hire Date",
@@ -53,7 +53,7 @@ var userCols = [
   }, {
     id: "deleted",
     alias: "Deleted",
-    dataType: tableau.dataTypeEnum.boolean
+    dataType: tableau.dataTypeEnum.bool
   }, {
     id: "account_owner",
     alias: "Account Owner",
@@ -61,7 +61,7 @@ var userCols = [
   }, {
     id: "invitation_pending",
     alias: "Invitation Pending",
-    dataType: tableau.dataTypeEnum.boolean
+    dataType: tableau.dataTypeEnum.bool
   }, {
     id: "user_settings",
     alias: "User Settings",
@@ -101,7 +101,7 @@ var userCols = [
   }, {
     id: "has_login",
     alias: "Has Login",
-    dataType: tableau.dataTypeEnum.boolean
+    dataType: tableau.dataTypeEnum.bool
   }, {
     id: "login_type",
     alias: "Login Type",

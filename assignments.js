@@ -45,7 +45,7 @@ var assignmentCols = [
   }, {
     id: "all_day_assignment",
     alias: "All Day Assignment",
-    dataType: tableau.dataTypeEnum.boolean
+    dataType: tableau.dataTypeEnum.bool
   }, {
     id: "resource_request_id",
     alias: "Resource Request ID",
@@ -53,7 +53,7 @@ var assignmentCols = [
   }, {
     id: "status",
     alias: "Status",
-    dataType: tableau.dataTypeEnum.boolean
+    dataType: tableau.dataTypeEnum.bool
   }];
 
 var assignmentTableSchema = {
