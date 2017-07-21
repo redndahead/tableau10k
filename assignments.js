@@ -104,8 +104,7 @@ function assignmentGetData(table, doneCallback) {
             "updated_at": data[i].updated_at,
             "all_day_assignment": data[i].all_day_assignment,
             "resource_request_id": data[i].resource_request_id,
-            "status": data[i].status,
-            "project_id": projectID
+            "status": data[i].status
           });
         }
 
