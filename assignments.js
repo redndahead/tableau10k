@@ -54,10 +54,6 @@ var assignmentCols = [
     id: "status",
     alias: "Status",
     dataType: tableau.dataTypeEnum.boolean
-  }, {
-    id: "project_id",
-    alias: "Project ID",
-    dataType: tableau.dataTypeEnum.int
   }];
 
 var assignmentTableSchema = {
