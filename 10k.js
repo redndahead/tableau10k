@@ -4,7 +4,7 @@
 
     // Define the schema
     myConnector.getSchema = function(schemaCallback) {
-      schemaCallback([projectTableSchema, userTableSchema]);
+      schemaCallback([projectTableSchema, userTableSchema, assignmentTableSchema]);
     };
 
     // Download the data
@@ -15,6 +15,10 @@
 
       if (table.tableInfo.id == "users") {
         userGetData(table, doneCallback);
+      }
+
+      if (table.tableInfo.id == "assignments") {
+        assignmentGetData(table, doneCallback);
       }
     };
 

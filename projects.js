@@ -255,3 +255,23 @@ function projectExtractCustomVals(customValues) {
 
   return customVals;
 }
+
+function getProjectIDs() {
+  var projectIDs = [];
+  $.ajax({
+    url: 'https://api.10000ft.com/api/v1/projects?per_page=200',
+    type: 'GET',
+    dataType: 'json',
+    async: false,
+    success: function(resp) {
+      var data = resp.data;
+      for (var i = 0, len = data.length; i < len; i++) {
+        var projectID = data[i].id;
+        projectIDs.push(projectID);
+      }
+    },
+    beforeSend: setHeader
+  });
+
+  return projectIDs;
+}
