@@ -77,7 +77,7 @@ function assignmentGetData(table, doneCallback) {
     while (nextURL) {
       // Get the list of assignments and add them to the table.
       $.ajax({
-        url: 'https://api.10000ft.com' + nextURL,
+        url: base10KURL + nextURL,
         type: 'GET',
         dataType: 'json',
         async: false,

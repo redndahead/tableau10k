@@ -127,7 +127,7 @@ function userGetData(table, doneCallback) {
   var paging = {};
   while (nextURL) {
     $.ajax({
-      url: 'https://api.10000ft.com' + nextURL,
+      url: base10KURL + nextURL,
       type: 'GET',
       dataType: 'json',
       async: false,
