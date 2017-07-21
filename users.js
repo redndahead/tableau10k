@@ -123,54 +123,68 @@ var userTableSchema = {
 };
 
 function userGetData(table, doneCallback) {
-  $.ajax({
-    url: 'https://api.10000ft.com/api/v1/users?per_page=200',
-    type: 'GET',
-    dataType: 'json',
-    success: function(resp) {
-      var data = resp.data,
-          tableData = [];
+  var nextURL = '/api/v1/users?per_page=100';
+  var paging = {};
+  while (nextURL) {
+    $.ajax({
+      url: 'https://api.10000ft.com' + nextURL,
+      type: 'GET',
+      dataType: 'json',
+      async: false,
+      success: function(resp) {
+        var data = resp.data,
+            tableData = [];
+        paging = resp.paging;
 
-      // Iterate over the JSON object
-      for (var i = 0, len = data.length; i < len; i++) {
+        // Iterate over the JSON object
+        for (var i = 0, len = data.length; i < len; i++) {
 
-        tableData.push({
-          "id": data[i].id,
-          "first_name": data[i].first_name,
-          "last_name": data[i].last_name,
-          "archived": data[i].archived,
-          "display_name": data[i].display_name,
-          "email": data[i].email,
-          "user_type_id": data[i].user_type_id,
-          "billable": data[i].billable,
-          "hire_date": data[i].hire_date,
-          "termination_date": data[i].termination_date,
-          "mobile_phone": data[i].mobile_phone,
-          "office_phone": data[i].office_phone,
-          "deleted_at": data[i].deleted_at,
-          "deleted": data[i].deleted,
-          "account_owner": data[i].account_owner,
-          "invitation_pending": data[i].invitation_pending,
-          "user_settings": data[i].user_settings,
-          "guid": data[i].guid,
-          "employee_number": data[i].employee_number,
-          "billability_target": data[i].billability_target,
-          "billrate": data[i].billrate,
-          "role": data[i].role,
-          "discipline": data[i].discipline,
-          "location": data[i].location,
-          "created_at": data[i].created_at,
-          "updated_at": data[i].updated_at,
-          "has_login": data[i].has_login,
-          "login_type": data[i].login_type,
-          "archived_at": data[i].archived_at,
-          "thumbnail": data[i].thumbnail
-        });
-      }
+          tableData.push({
+            "id": data[i].id,
+            "first_name": data[i].first_name,
+            "last_name": data[i].last_name,
+            "archived": data[i].archived,
+            "display_name": data[i].display_name,
+            "email": data[i].email,
+            "user_type_id": data[i].user_type_id,
+            "billable": data[i].billable,
+            "hire_date": data[i].hire_date,
+            "termination_date": data[i].termination_date,
+            "mobile_phone": data[i].mobile_phone,
+            "office_phone": data[i].office_phone,
+            "deleted_at": data[i].deleted_at,
+            "deleted": data[i].deleted,
+            "account_owner": data[i].account_owner,
+            "invitation_pending": data[i].invitation_pending,
+            "user_settings": data[i].user_settings,
+            "guid": data[i].guid,
+            "employee_number": data[i].employee_number,
+            "billability_target": data[i].billability_target,
+            "billrate": data[i].billrate,
+            "role": data[i].role,
+            "discipline": data[i].discipline,
+            "location": data[i].location,
+            "created_at": data[i].created_at,
+            "updated_at": data[i].updated_at,
+            "has_login": data[i].has_login,
+            "login_type": data[i].login_type,
+            "archived_at": data[i].archived_at,
+            "thumbnail": data[i].thumbnail
+          });
+        }
 
-      table.appendRows(tableData);
-      doneCallback();
-    },
-    beforeSend: setHeader
-  });
+        table.appendRows(tableData);
+        doneCallback();
+      },
+      beforeSend: setHeader
+    });
+
+    if ("next" in paging) {
+
+      nextURL = paging.next;
+    }
+    else {
+      nextURL = false;
+    }
+  }
 }

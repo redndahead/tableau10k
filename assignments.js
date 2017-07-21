@@ -72,43 +72,55 @@ function assignmentGetData(table, doneCallback) {
     // Set the current projectID
     var projectID = projectIDs[index];
 
-    // Get the list of assignments and add them to the table.
-    $.ajax({
-      url: 'https://api.10000ft.com/api/v1/projects/' + projectID + '/assignments?per_page=200',
-      type: 'GET',
-      dataType: 'json',
-      async: false,
-      success: function(resp) {
-        var data = resp.data,
-            tableData = [];
+    var nextURL = '/api/v1/projects/' + projectID + '/assignments?per_page=100';
+    var paging = {};
+    while (nextURL) {
+      // Get the list of assignments and add them to the table.
+      $.ajax({
+        url: 'https://api.10000ft.com' + nextURL,
+        type: 'GET',
+        dataType: 'json',
+        async: false,
+        success: function(resp) {
+          var data = resp.data,
+              tableData = [];
+          paging = resp.paging;
 
-        // Iterate over the JSON object
-        for (var i = 0, len = data.length; i < len; i++) {
+          // Iterate over the JSON object
+          for (var i = 0, len = data.length; i < len; i++) {
 
-          tableData.push({
-            "id": data[i].id,
-            "allocation_mode": data[i].allocation_mode,
-            "percent": data[i].percent,
-            "user_id": data[i].user_id,
-            "assignable_id": data[i].assignable_id,
-            "ends_at": data[i].ends_at,
-            "starts_at": data[i].starts_at,
-            "bill_rate": data[i].bill_rate,
-            "bill_rate_id": data[i].bill_rate_id,
-            "repetition_id": data[i].repetition_id,
-            "created_at": data[i].created_at,
-            "updated_at": data[i].updated_at,
-            "all_day_assignment": data[i].all_day_assignment,
-            "resource_request_id": data[i].resource_request_id,
-            "status": data[i].status
-          });
-        }
+            tableData.push({
+              "id": data[i].id,
+              "allocation_mode": data[i].allocation_mode,
+              "percent": data[i].percent,
+              "user_id": data[i].user_id,
+              "assignable_id": data[i].assignable_id,
+              "ends_at": data[i].ends_at,
+              "starts_at": data[i].starts_at,
+              "bill_rate": data[i].bill_rate,
+              "bill_rate_id": data[i].bill_rate_id,
+              "repetition_id": data[i].repetition_id,
+              "created_at": data[i].created_at,
+              "updated_at": data[i].updated_at,
+              "all_day_assignment": data[i].all_day_assignment,
+              "resource_request_id": data[i].resource_request_id,
+              "status": data[i].status
+            });
+          }
 
-        table.appendRows(tableData);
-        doneCallback();
-      },
-      beforeSend: setHeader
-    });
+          table.appendRows(tableData);
+          doneCallback();
+        },
+        beforeSend: setHeader
+      });
+
+      if ("next" in paging) {
+        nextURL = paging.next;
+      }
+      else {
+        nextURL = false;
+      }
+    }
   }
 
 
