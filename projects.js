@@ -122,56 +122,68 @@ var projectTableSchema = {
 var projectData = [];
 
 function projectGetData(table, doneCallback) {
-  $.ajax({
-    url: 'https://api.10000ft.com/api/v1/projects?per_page=200&fields=custom_field_values',
-    type: 'GET',
-    dataType: 'json',
-    async: false,
-    success: function(resp) {
-      var data = resp.data;
+  var nextURL = '/api/v1/projects?per_page=100&fields=custom_field_values';
+  var paging = {};
+  while (nextURL) {
+    $.ajax({
+      url: 'https://api.10000ft.com' + nextURL,
+      type: 'GET',
+      dataType: 'json',
+      async: false,
+      success: function(resp) {
+        var data = resp.data;
+        paging = resp.paging;
 
-      // Iterate over the JSON object
-      for (var i = 0, len = data.length; i < len; i++) {
-        // Extract the custom field values.
-        var customVals = projectExtractCustomVals(data[i].custom_field_values.data);
+        // Iterate over the JSON object
+        for (var i = 0, len = data.length; i < len; i++) {
+          // Extract the custom field values.
+          var customVals = projectExtractCustomVals(data[i].custom_field_values.data);
 
-        projectData.push({
-            "id": data[i].id,
-            "archived": data[i].archived,
-            "description": data[i].description,
-            "guid": data[i].guid,
-            "name": data[i].name,
-            "phase_name": data[i].phase_name,
-            "project_code": data[i].project_code,
-            "client": data[i].client,
-            "project_state": data[i].project_state,
-            "starts_at": data[i].starts_at,
-            "ends_at": data[i].ends_at,
-            "projectDevelopmentPhase": customVals.projectDevelopmentPhase,
-            "projectManager": customVals.projectManager,
-            "productManager": customVals.productManager,
-            "strategicObjective": customVals.strategicObjective,
-            "architectPartner": customVals.architectPartner,
-            "internalProjectStatus": customVals.internalProjectStatus,
-            "acDeck": customVals.acDeck,
-            "pmoDeck": customVals.pmoDeck,
-            "director": customVals.director,
-            "gsbPrioritization": customVals.gsbPrioritization,
-            "effort": customVals.effort,
-            "beneficiary": customVals.beneficiary,
-            "valueToSchool": customVals.valueToSchool,
-            "parentProgram": customVals.parentProgram,
-            "projectFolder": customVals.projectFolder,
-            "ti_ci_mi": customVals.ti_ci_mi,
-            "primaryClientContact": customVals.primaryClientContact
-        });
-      }
+          projectData.push({
+              "id": data[i].id,
+              "archived": data[i].archived,
+              "description": data[i].description,
+              "guid": data[i].guid,
+              "name": data[i].name,
+              "phase_name": data[i].phase_name,
+              "project_code": data[i].project_code,
+              "client": data[i].client,
+              "project_state": data[i].project_state,
+              "starts_at": data[i].starts_at,
+              "ends_at": data[i].ends_at,
+              "projectDevelopmentPhase": customVals.projectDevelopmentPhase,
+              "projectManager": customVals.projectManager,
+              "productManager": customVals.productManager,
+              "strategicObjective": customVals.strategicObjective,
+              "architectPartner": customVals.architectPartner,
+              "internalProjectStatus": customVals.internalProjectStatus,
+              "acDeck": customVals.acDeck,
+              "pmoDeck": customVals.pmoDeck,
+              "director": customVals.director,
+              "gsbPrioritization": customVals.gsbPrioritization,
+              "effort": customVals.effort,
+              "beneficiary": customVals.beneficiary,
+              "valueToSchool": customVals.valueToSchool,
+              "parentProgram": customVals.parentProgram,
+              "projectFolder": customVals.projectFolder,
+              "ti_ci_mi": customVals.ti_ci_mi,
+              "primaryClientContact": customVals.primaryClientContact
+          });
+        }
 
-      table.appendRows(projectData);
-      doneCallback();
-    },
-    beforeSend: setHeader
-  });
+        table.appendRows(projectData);
+        doneCallback();
+      },
+      beforeSend: setHeader
+    });
+
+    if ("next" in paging) {
+      nextURL = paging.next;
+    }
+    else {
+      nextURL = false;
+    }
+  }
 }
 
 // Extract custom values from the object.
